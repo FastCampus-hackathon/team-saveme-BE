@@ -1,11 +1,13 @@
 package com.saveme.comparator.dto;
 
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class LogInDto {
 
     private String email;
