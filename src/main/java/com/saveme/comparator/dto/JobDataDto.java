@@ -1,13 +1,14 @@
 package com.saveme.comparator.dto;
 
-import lombok.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import com.saveme.comparator.domain.Wish;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class JobDataDto {
     private String url;
@@ -23,4 +24,23 @@ public class JobDataDto {
     private String experienceLevel;
     private String expirationDate;
     private Integer applyCnt;
+
+    public static JobDataDto createJobDataDtoWithWish(Wish w) {
+
+        return JobDataDto
+                .builder()
+                .url(w.getRecruition().getUrl())
+                .recruitmentId(w.getRecruition().getRecruitmentId().toString())
+                .companyHref(w.getRecruition().getCompanyHref())
+                .positionTitle(w.getRecruition().getPositionTitle())
+                .industryName(w.getRecruition().getIndustryName())
+                .locationName(w.getRecruition().getLocationName())
+                .jobType(w.getRecruition().getJobType())
+                .salaryName(w.getRecruition().getSalaryName())
+                .requiredEducationLevel(w.getRecruition().getRequiredEducationLevel())
+                .experienceLevel(w.getRecruition().getExperienceLevel())
+                .expirationDate(w.getRecruition().getExpirationDate())
+                .applyCnt(w.getRecruition().getApplyCnt())
+                .build();
+    }
 }
