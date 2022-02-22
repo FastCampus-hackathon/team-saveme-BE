@@ -58,6 +58,7 @@ public class UserService {
             savedWish.addWishListOfUser(user);
             savedWish.addWishListOfRecruition(getRecruitionById(jobDataDto));
         }
+
     }
 
 
@@ -76,7 +77,7 @@ public class UserService {
                 convertRecruitionType(jobDataDto.getRecruitmentId()));
     }
 
-    private User getUserByAuth(Authentication auth) {
+    public User getUserByAuth(Authentication auth) {
         CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
         User user = userRepository.findById(customUserDetails.getUser().getUserId()).orElseThrow(
                 () -> new IllegalArgumentException("no such user")

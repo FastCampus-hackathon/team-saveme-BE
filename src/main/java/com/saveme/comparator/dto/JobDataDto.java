@@ -1,14 +1,12 @@
 package com.saveme.comparator.dto;
 
 import com.saveme.comparator.domain.Wish;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
 @Getter
 public class JobDataDto {
     private String url;
@@ -33,6 +31,7 @@ public class JobDataDto {
                 .url(w.getRecruition().getUrl())
                 .recruitmentId(w.getRecruition().getRecruitmentId().toString())
                 .companyHref(w.getRecruition().getCompanyHref())
+                .companyName(w.getRecruition().getCompanyName())
                 .positionTitle(w.getRecruition().getPositionTitle())
                 .industryName(w.getRecruition().getIndustryName())
                 .locationName(w.getRecruition().getLocationName())

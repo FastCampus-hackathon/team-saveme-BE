@@ -1,6 +1,7 @@
 package com.saveme.comparator.controller;
 
 import com.saveme.comparator.domain.Data;
+import com.saveme.comparator.domain.User;
 import com.saveme.comparator.dto.JobDataDto;
 import com.saveme.comparator.service.JobService;
 import com.saveme.comparator.service.UserService;
@@ -11,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -26,10 +28,12 @@ public class ApiController {
     public ResponseEntity<Data<List<JobDataDto>>> getJobsList(@RequestParam("keywords") String keywords,
                                                               @RequestParam("loc_cd") String locationCode,
                                                               @RequestParam("start") Integer start,
-                                                              @RequestParam("count") Integer count) {
+                                                              @RequestParam("count") Integer count,
+                                                              Authentication auth) {
 
 
-        return new ResponseEntity<>(new Data<>(jobService.getJobDataList(start, keywords, locationCode, count)), HttpStatus.OK);
+        return new ResponseEntity<>(new Data<>(jobService.getJobDataList(
+                start, keywords, locationCode, count,userService.getUserByAuth(auth))), HttpStatus.OK);
     }
 
     @PostMapping("/users/wish")

@@ -1,7 +1,9 @@
 package com.saveme.comparator.service;
 
+import com.saveme.comparator.domain.User;
 import com.saveme.comparator.dto.JobDataDto;
 import com.saveme.comparator.repository.RecruitionRepository;
+import com.saveme.comparator.repository.WishRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -28,9 +30,9 @@ import static com.saveme.comparator.service.UserService.convertRecruitionType;
 @RequiredArgsConstructor
 public class JobService {
 
-    private final RecruitionRepository recruitionRepository;
+    private final WishRepository wishRepository;
 
-    public List<JobDataDto> getJobDataList(Integer start, String keywords, String locationCode, Integer count) {
+    public List<JobDataDto> getJobDataList(Integer start, String keywords, String locationCode, Integer count, User user) {
 
         URI uri = UriComponentsBuilder
                 .fromUriString("https://oapi.saramin.co.kr")
@@ -58,7 +60,6 @@ public class JobService {
         List<JobDataDto> jobDataDtos = new ArrayList<>();
 
         Date timestamp = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd-HH");
         for (int i = 0; i < jobs.size(); i++) {
             JSONObject job = (JSONObject) jobs.get(i);
             String url = (String) job.get("url");
@@ -86,8 +87,9 @@ public class JobService {
             timestamp = new Date(expirationTimestamp * 1000);
             Boolean isWished = false;
 
-            if (recruitionRepository.existsByRecruitmentId(convertRecruitionType(id))) isWished = true;
-
+            if (wishRepository.existsByUserAndRecruition_RecruitmentId(user,convertRecruitionType(id))) {
+                isWished = true;
+            }
             jobDataDtos.add(JobDataDto.builder()
                     .recruitmentId(id)
                     .url(url)
