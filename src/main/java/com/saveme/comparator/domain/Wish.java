@@ -1,10 +1,7 @@
 package com.saveme.comparator.domain;
 
 import com.saveme.comparator.dto.JobDataDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 @Entity
 public class Wish {
 
@@ -38,12 +36,12 @@ public class Wish {
 
     public void addWishListOfUser(User user){
         this.user = user;
-        user.getWishList().add(this);
+        this.user.getWishList().add(this);
     }
 
     public void addWishListOfRecruition(Recruition recruition){
         this.recruition = recruition;
-        recruition.getWishList().add(this);
+        this.recruition.getWishList().add(this);
     }
 
 }

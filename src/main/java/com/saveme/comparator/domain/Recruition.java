@@ -2,10 +2,7 @@ package com.saveme.comparator.domain;
 
 
 import com.saveme.comparator.dto.JobDataDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,6 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 @Entity
 public class Recruition {
 
