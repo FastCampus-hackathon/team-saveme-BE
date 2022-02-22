@@ -2,6 +2,11 @@ package com.saveme.comparator.controller;
 
 import com.saveme.comparator.domain.Data;
 import com.saveme.comparator.dto.JobDataDto;
+
+
+import com.saveme.comparator.dto.WishSetDto;
+import com.saveme.comparator.service.UserService;
+
 import com.saveme.comparator.service.JobService;
 import com.saveme.comparator.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -40,9 +51,17 @@ public class ApiController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
     @GetMapping("/users/wishList")
     public ResponseEntity<Data<List<JobDataDto>>> getWishList(Authentication auth) {
 
         return new ResponseEntity<>(new Data<>(userService.getWishList(auth)), HttpStatus.OK);
     }
+
+    @PostMapping("/users/wish-set/save")
+    public ResponseEntity<?> saveWishSet (@RequestBody WishSetDto wishSetDto) {
+        userService.createWishSet(wishSetDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

@@ -1,20 +1,20 @@
 package com.saveme.comparator.service;
 
 import com.saveme.comparator.config.security.CustomUserDetails;
-import com.saveme.comparator.domain.Recruition;
-import com.saveme.comparator.domain.User;
-import com.saveme.comparator.domain.Wish;
+import com.saveme.comparator.domain.*;
 import com.saveme.comparator.dto.JobDataDto;
-import com.saveme.comparator.repository.RecruitionRepository;
-import com.saveme.comparator.repository.UserRepository;
-import com.saveme.comparator.repository.WishRepository;
+import com.saveme.comparator.dto.WishSetDto;
+import com.saveme.comparator.dto.WishSetMemoDto;
+import com.saveme.comparator.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.ArrayList;
+
 import java.util.List;
 
 import static com.saveme.comparator.domain.Recruition.createRecruition;
@@ -27,7 +27,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
     private final RecruitionRepository recruitionRepository;
-
+    private final WishSetRepository wishSetRepository;
+    private final WishSetMemoRepository wishSetMemoRepository;
 
     public List<JobDataDto> getWishList(Authentication auth) {
         User user = getUserByAuth(auth);
@@ -89,7 +90,6 @@ public class UserService {
                 user, convertRecruitionType(jobDataDto.getRecruitmentId()));
     }
 
-
     public User createUser(User user) {
 
         final String email = user.getEmail();
@@ -100,4 +100,20 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
+    public void createWishSet(WishSetDto wishSetDto) {
+        WishSet wishSet = WishSet.builder().setTitle(wishSetDto.getSetTitle()).build();
+        wishSet = wishSetRepository.save(wishSet);
+
+        List<WishSetMemoDto> wishSetMemoDtos =  wishSetDto.getWishSetMemos();
+
+        for(WishSetMemoDto wishSetMemoDto : wishSetMemoDtos) {
+            wishSetMemoRepository.save(WishSetMemo.builder()
+                    .wishSetMemoPK(new WishSetMemoPK(wishSet.getWishSetId(),wishSetMemoDto.getWishId()))
+                    .wish( wishRepository.getById(wishSetMemoDto.getWishId()))
+                    .wishSet(wishSet)
+                    .memo(wishSetMemoDto.getMemo())
+                    .build());
+        }
+    }
 }
