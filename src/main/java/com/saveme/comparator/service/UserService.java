@@ -13,7 +13,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User createUser(final User user) {
+    public User createUser(User user) {
 
         final String email = user.getEmail();
         if (userRepository.existsByEmail(email)) {
@@ -22,4 +22,5 @@ public class UserService {
         }
         return userRepository.save(user);
     }
+
 }
