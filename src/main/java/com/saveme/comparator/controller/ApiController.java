@@ -1,18 +1,15 @@
 package com.saveme.comparator.controller;
+
 import com.saveme.comparator.domain.Data;
 import com.saveme.comparator.dto.JobDataDto;
-import com.saveme.comparator.service.UserService;
 import com.saveme.comparator.service.JobService;
+import com.saveme.comparator.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @RestController
@@ -35,12 +32,17 @@ public class ApiController {
         return new ResponseEntity<>(new Data<>(jobService.getJobDataList(start, keywords, locationCode, count)), HttpStatus.OK);
     }
 
-    @PutMapping("/users/wish")
+    @PostMapping("/users/wish")
     public ResponseEntity<?> addWish(Authentication auth, @RequestBody JobDataDto jobDataDto) {
 
         userService.addWishJob(auth, jobDataDto);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
 
+    @GetMapping("/users/wishList")
+    public ResponseEntity<Data<List<JobDataDto>>> getWishList(Authentication auth) {
+
+        return new ResponseEntity<>(new Data<>(userService.getWishList(auth)), HttpStatus.OK);
     }
 }

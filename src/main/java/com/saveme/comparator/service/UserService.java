@@ -14,6 +14,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.saveme.comparator.domain.Recruition.createRecruition;
 
 @Slf4j
@@ -24,6 +27,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
     private final RecruitionRepository recruitionRepository;
+
+
+    public List<JobDataDto> getWishList(Authentication auth) {
+        User user = getUserByAuth(auth);
+        List<Wish> wishList = wishRepository.findAllByUser(user);
+        List<JobDataDto> dataDtoList = new ArrayList<>();
+        wishList.stream().map(
+                        w -> dataDtoList.add(JobDataDto.createJobDataDtoWithWish(w)
+        ));
+        return dataDtoList;
+    }
+
+
 
     @Transactional
     public void addWishJob(Authentication auth, JobDataDto jobDataDto) {
@@ -60,7 +76,9 @@ public class UserService {
 
     private User getUserByAuth(Authentication auth) {
         CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
-        User user = customUserDetails.getUser();
+        User user = userRepository.findById(customUserDetails.getUser().getUserId()).orElseThrow(
+                () -> new IllegalArgumentException("no such user")
+        );
         return user;
     }
 
