@@ -15,10 +15,9 @@ public class JobDataDto {
     private String companyName;
     private String positionTitle;
     private String industryName;
-    private List<String> locationNameList = new ArrayList<>();
-    private List<String> codeList = new ArrayList<>();
+    private String locationName;
     private String jobType;
-    private String salary;
+    private String salaryName;
     private String requiredEducationLevel;
     private String postingDate;
     private String expirationDate;
