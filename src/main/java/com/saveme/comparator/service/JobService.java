@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.saveme.comparator.service.UserService.recruitionTypeConverted;
+import static com.saveme.comparator.service.UserService.convertRecruitionType;
 
 @Service
 @RequiredArgsConstructor
@@ -86,7 +86,7 @@ public class JobService {
             timestamp = new Date(expirationTimestamp * 1000);
             Boolean isWished = false;
 
-            if (recruitionRepository.existsByRecruitmentId(recruitionTypeConverted(id))) isWished = true;
+            if (recruitionRepository.existsByRecruitmentId(convertRecruitionType(id))) isWished = true;
 
             jobDataDtos.add(JobDataDto.builder()
                     .recruitmentId(id)

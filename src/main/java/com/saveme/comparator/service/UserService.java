@@ -31,9 +31,9 @@ public class UserService {
 
     public List<JobDataDto> getWishList(Authentication auth) {
         User user = getUserByAuth(auth);
-        List<Wish> wishList = wishRepository.findAllByUser(user);
+        List<Wish> wishList = wishRepository.findAllByUser_UserId(user.getUserId());
         List<JobDataDto> dataDtoList = new ArrayList<>();
-        wishList.stream().map(
+        wishList.forEach(
                         w -> dataDtoList.add(JobDataDto.createJobDataDtoWithWish(w)
         ));
         return dataDtoList;
@@ -51,7 +51,8 @@ public class UserService {
         }
 
         if (isUserAlreadyWishedRecruition(jobDataDto, user)) {
-            wishRepository.deleteByUserAndRecruition_RecruitmentId(user, recruitionTypeConverted(jobDataDto));
+            wishRepository.deleteByUserAndRecruition_RecruitmentId(user,
+                    convertRecruitionType(jobDataDto.getRecruitmentId()));
         } else {
             Wish savedWish = wishRepository.save(Wish.createWish(user, getRecruitionById(jobDataDto)));
             savedWish.addWishListOfUser(user);
@@ -60,18 +61,19 @@ public class UserService {
     }
 
 
-    private long recruitionTypeConverted(JobDataDto jobDataDto) {
-        return Long.parseLong(jobDataDto.getRecruitmentId());
+    public static long convertRecruitionType(String recruitionId) {
+        return Long.parseLong(recruitionId);
     }
 
     private Recruition getRecruitionById(JobDataDto jobDataDto) {
         return recruitionRepository.findById(
-                        recruitionTypeConverted(jobDataDto))
+                        convertRecruitionType(jobDataDto.getRecruitmentId()))
                 .orElseThrow(() -> new IllegalArgumentException("no such data"));
     }
 
     private boolean isAlreadySavedRecruition(JobDataDto jobDataDto) {
-        return recruitionRepository.existsByRecruitmentId(recruitionTypeConverted(jobDataDto));
+        return recruitionRepository.existsByRecruitmentId(
+                convertRecruitionType(jobDataDto.getRecruitmentId()));
     }
 
     private User getUserByAuth(Authentication auth) {
@@ -83,7 +85,8 @@ public class UserService {
     }
 
     private boolean isUserAlreadyWishedRecruition(JobDataDto jobDataDto, User user) {
-        return wishRepository.existsByUserAndRecruition_RecruitmentId(user, recruitionTypeConverted(jobDataDto));
+        return wishRepository.existsByUserAndRecruition_RecruitmentId(
+                user, convertRecruitionType(jobDataDto.getRecruitmentId()));
     }
 
 
