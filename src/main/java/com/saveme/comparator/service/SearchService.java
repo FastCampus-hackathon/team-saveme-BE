@@ -17,13 +17,19 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class SearchService {
-/*
 
     public List<JobDataDto> getJobDataList (Integer start, String keywords, String locationCode,Integer count) {
 
@@ -51,6 +57,9 @@ public class SearchService {
         JSONArray jobs = (JSONArray)((JSONObject)jsonObject.get("jobs") ).get("job");
 
         List<JobDataDto> jobDataDtos = new ArrayList<>();
+
+        Date timestamp = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd-HH");
         for(int i = 0 ; i < jobs.size() ; i++ ){
             JSONObject job = (JSONObject) jobs.get(i);
             String url = (String) job.get("url");
@@ -63,7 +72,7 @@ public class SearchService {
             JSONObject industry = (JSONObject) postion.get("industry");
             String industryName = (String) industry.get("name");
             JSONObject location = (JSONObject) postion.get("location");
-            String locationName = (String) location.get("name");
+            String locationName = ((String) location.get("name")).replace("&gt; ","");
             JSONObject jobType = (JSONObject) postion.get("job-type");
             String jobTypeName = (String) jobType.get("name");
             JSONObject experienceLevel = (JSONObject) postion.get("experience-level");
@@ -75,6 +84,10 @@ public class SearchService {
             String id = (String) job.get("id");
             Integer applyCnt = Integer.parseInt( (String) job.get("apply-cnt"));
             Long expirationTimestamp = Long.parseLong((String) job.get("expiration-timestamp"));
+            timestamp = new Date(expirationTimestamp * 1000);
+
+
+
             jobDataDtos.add(JobDataDto.builder()
                     .recruitmentId(id)
                     .url(url)
@@ -86,11 +99,12 @@ public class SearchService {
                     .jobType(jobTypeName)
                     .salaryName(salaryName)
                     .requiredEducationLevel(requiredEducationLevelName)
+                    .experienceLevel(experienceLevelName)
+                    .expirationDate(timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString())
                     .applyCnt(applyCnt)
                     .build());
         }
         return jobDataDtos;
     }
-*/
 
 }

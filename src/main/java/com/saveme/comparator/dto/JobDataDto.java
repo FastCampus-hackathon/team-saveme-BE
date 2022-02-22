@@ -1,12 +1,14 @@
 package com.saveme.comparator.dto;
 
-import lombok.Builder;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Builder
+@Getter
 public class JobDataDto {
     private String url;
     private String recruitmentId;
@@ -18,6 +20,7 @@ public class JobDataDto {
     private String jobType;
     private String salaryName;
     private String requiredEducationLevel;
-    private LocalDate expirationDate;
+    private String experienceLevel;
+    private String expirationDate;
     private Integer applyCnt;
 }
