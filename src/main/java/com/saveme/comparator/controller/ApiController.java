@@ -76,8 +76,8 @@ public class ApiController {
 
 
     @PostMapping("/users/wish-set/save")
-    public ResponseEntity<?> saveWishSet (@RequestBody WishSetDto wishSetDto) {
-        userService.createWishSet(wishSetDto);
+    public ResponseEntity<?> saveWishSet (Authentication auth, @RequestBody WishSetDto wishSetDto) {
+        userService.createWishSet(auth, wishSetDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

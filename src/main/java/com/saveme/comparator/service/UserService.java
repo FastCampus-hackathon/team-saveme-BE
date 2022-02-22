@@ -102,8 +102,9 @@ public class UserService {
     }
 
     @Transactional
-    public void createWishSet(WishSetDto wishSetDto) {
+    public void createWishSet(Authentication auth ,WishSetDto wishSetDto) {
         WishSet wishSet = WishSet.builder().setTitle(wishSetDto.getSetTitle()).build();
+        wishSet.setUser(getUserByAuth(auth));
         wishSet = wishSetRepository.save(wishSet);
 
         List<WishSetMemoDto> wishSetMemoDtos =  wishSetDto.getWishSetMemos();
