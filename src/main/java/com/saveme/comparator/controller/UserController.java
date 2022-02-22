@@ -3,6 +3,8 @@ package com.saveme.comparator.controller;
 import com.saveme.comparator.config.security.CustomUserDetails;
 import com.saveme.comparator.domain.User;
 import com.saveme.comparator.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+@Api(tags = {"회원가입용 컨트롤러입니다."})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
@@ -23,14 +26,7 @@ public class UserController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserService userService;
 
-
-    @GetMapping("/users/me")
-    public String getMe(Authentication auth){
-
-        return"sdsd";
-    }
-
-
+    @ApiOperation(value="회원가입",notes="유저 회원가입. 데이터는 디폴트로 컨트롤러에 고정 시켜놨습니다.")
     @PostMapping("auth/signup")
     public ResponseEntity<?> registerUser() {
 
