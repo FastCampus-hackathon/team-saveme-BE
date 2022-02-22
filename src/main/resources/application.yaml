@@ -16,3 +16,11 @@ spring:
 
 server:
   port: 8881
+  ssl:
+    enabled: true
+    key-store: /root/test/isu.jks
+    key-store-password: 123456
+    key-password: 123456
+    key-alias: isu
+    trust-store: /root/test/isu.ts
+    trust-store-password: 123456
