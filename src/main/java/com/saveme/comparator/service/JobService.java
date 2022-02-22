@@ -1,6 +1,7 @@
 package com.saveme.comparator.service;
 
 import com.saveme.comparator.dto.JobDataDto;
+import com.saveme.comparator.repository.RecruitionRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,16 +22,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.saveme.comparator.service.UserService.recruitionTypeConverted;
+
 @Service
 @RequiredArgsConstructor
 public class JobService {
 
-    public List<JobDataDto> getJobDataList (Integer start, String keywords, String locationCode,Integer count) {
+    private final RecruitionRepository recruitionRepository;
+
+    public List<JobDataDto> getJobDataList(Integer start, String keywords, String locationCode, Integer count) {
 
         URI uri = UriComponentsBuilder
                 .fromUriString("https://oapi.saramin.co.kr")
                 .path("/job-search")
-                .queryParam("access-key","MStxmvSqpmOLBN9L9hZqpeeqwqHdyZucIwBT8LNf0FcPvQ5FDye6")
+                .queryParam("access-key", "MStxmvSqpmOLBN9L9hZqpeeqwqHdyZucIwBT8LNf0FcPvQ5FDye6")
                 .queryParam("start", start)
                 .queryParam("keywords", keywords)
                 .queryParam("loc_cd", locationCode)
@@ -39,7 +44,7 @@ public class JobService {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<JSONObject> responseEntity = restTemplate.exchange(uri, HttpMethod.GET,new HttpEntity<>(new HttpHeaders()), JSONObject.class);
+        ResponseEntity<JSONObject> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), JSONObject.class);
 
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = null;
@@ -48,13 +53,13 @@ public class JobService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        JSONArray jobs = (JSONArray)((JSONObject)jsonObject.get("jobs") ).get("job");
+        JSONArray jobs = (JSONArray) ((JSONObject) jsonObject.get("jobs")).get("job");
 
         List<JobDataDto> jobDataDtos = new ArrayList<>();
 
         Date timestamp = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd-HH");
-        for(int i = 0 ; i < jobs.size() ; i++ ){
+        for (int i = 0; i < jobs.size(); i++) {
             JSONObject job = (JSONObject) jobs.get(i);
             String url = (String) job.get("url");
             JSONObject company = (JSONObject) job.get("company");
@@ -66,7 +71,7 @@ public class JobService {
             JSONObject industry = (JSONObject) postion.get("industry");
             String industryName = (String) industry.get("name");
             JSONObject location = (JSONObject) postion.get("location");
-            String locationName = ((String) location.get("name")).replace("&gt; ","");
+            String locationName = ((String) location.get("name")).replace("&gt; ", "");
             JSONObject jobType = (JSONObject) postion.get("job-type");
             String jobTypeName = (String) jobType.get("name");
             JSONObject experienceLevel = (JSONObject) postion.get("experience-level");
@@ -76,11 +81,12 @@ public class JobService {
             JSONObject salary = (JSONObject) job.get("salary");
             String salaryName = (String) salary.get("name");
             String id = (String) job.get("id");
-            Integer applyCnt = Integer.parseInt( (String) job.get("apply-cnt"));
+            Integer applyCnt = Integer.parseInt((String) job.get("apply-cnt"));
             Long expirationTimestamp = Long.parseLong((String) job.get("expiration-timestamp"));
             timestamp = new Date(expirationTimestamp * 1000);
+            Boolean isWished = false;
 
-
+            if (recruitionRepository.existsByRecruitmentId(recruitionTypeConverted(id))) isWished = true;
 
             jobDataDtos.add(JobDataDto.builder()
                     .recruitmentId(id)
@@ -96,6 +102,7 @@ public class JobService {
                     .experienceLevel(experienceLevelName)
                     .expirationDate(timestamp.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString())
                     .applyCnt(applyCnt)
+                    .wished(isWished)
                     .build());
         }
         return jobDataDtos;

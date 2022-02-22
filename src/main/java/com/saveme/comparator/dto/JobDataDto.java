@@ -24,6 +24,7 @@ public class JobDataDto {
     private String experienceLevel;
     private String expirationDate;
     private Integer applyCnt;
+    private boolean wished;
 
     public static JobDataDto createJobDataDtoWithWish(Wish w) {
 
