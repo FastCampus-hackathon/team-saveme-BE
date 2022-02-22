@@ -41,6 +41,8 @@ public class Recruition {
 
         return Recruition
                 .builder()
+                .url(jobDataDto.getUrl())
+                .locationName(jobDataDto.getLocationName())
                 .recruitmentId(Long.parseLong(jobDataDto.getRecruitmentId()))
                 .companyHref(jobDataDto.getCompanyHref())
                 .companyName(jobDataDto.getCompanyName())
