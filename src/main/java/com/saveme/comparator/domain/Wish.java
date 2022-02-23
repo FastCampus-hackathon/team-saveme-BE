@@ -1,5 +1,6 @@
 package com.saveme.comparator.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.saveme.comparator.dto.JobDataDto;
 import lombok.*;
 

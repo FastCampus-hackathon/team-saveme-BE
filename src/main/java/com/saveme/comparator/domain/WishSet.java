@@ -18,4 +18,8 @@ public class WishSet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wishSetId;
     private String setTitle;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false , foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+    private User user;
 }

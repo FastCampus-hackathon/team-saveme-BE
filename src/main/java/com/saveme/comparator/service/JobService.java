@@ -37,7 +37,7 @@ public class JobService {
         URI uri = UriComponentsBuilder
                 .fromUriString("https://oapi.saramin.co.kr")
                 .path("/job-search")
-                .queryParam("access-key", "MStxmvSqpmOLBN9L9hZqpeeqwqHdyZucIwBT8LNf0FcPvQ5FDye6")
+                .queryParam("access-key", "wrOLLBw1hOrHGHccjXIza8qM9MyLsnABysjWdCAEi7wMzb5wy")
                 .queryParam("start", start)
                 .queryParam("keywords", keywords)
                 .queryParam("loc_cd", locationCode)

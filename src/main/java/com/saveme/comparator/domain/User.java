@@ -1,5 +1,7 @@
 package com.saveme.comparator.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,5 +27,6 @@ public class User {
     private String role;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private final List<Wish> wishList = new ArrayList<>();
 }

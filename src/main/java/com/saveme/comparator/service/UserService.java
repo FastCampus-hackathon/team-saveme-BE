@@ -102,10 +102,11 @@ public class UserService {
     }
 
     @Transactional
-    public void createWishSet(WishSetDto wishSetDto) {
+    public void createWishSet(Authentication auth ,WishSetDto wishSetDto) {
         WishSet wishSet = WishSet.builder().setTitle(wishSetDto.getSetTitle()).build();
+        User user = getUserByAuth(auth);
+        wishSet.setUser(user);
         wishSet = wishSetRepository.save(wishSet);
-
         List<WishSetMemoDto> wishSetMemoDtos =  wishSetDto.getWishSetMemos();
 
         for(WishSetMemoDto wishSetMemoDto : wishSetMemoDtos) {
@@ -116,5 +117,9 @@ public class UserService {
                     .memo(wishSetMemoDto.getMemo())
                     .build());
         }
+    }
+
+    public List<WishSet> getWishSet(Authentication auth) {
+        return wishSetRepository.findByUser_UserId( getUserByAuth(auth).getUserId() );
     }
 }
