@@ -6,6 +6,7 @@ import com.saveme.comparator.dto.JobDataDto;
 
 
 import com.saveme.comparator.dto.WishSetDto;
+import com.saveme.comparator.repository.WishSetRepository;
 import com.saveme.comparator.service.UserService;
 
 import com.saveme.comparator.service.JobService;
@@ -79,6 +80,12 @@ public class ApiController {
     public ResponseEntity<?> saveWishSet (Authentication auth, @RequestBody WishSetDto wishSetDto) {
         userService.createWishSet(auth, wishSetDto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/users/wish-set")
+    public ResponseEntity<?> getWishSet (Authentication auth) {
+
+        return new ResponseEntity<>(userService.getWishSet(auth),HttpStatus.OK);
     }
 
 }
